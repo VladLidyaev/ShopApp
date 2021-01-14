@@ -28,7 +28,7 @@ struct imageDataProvider { // Получение изображения
             completion(.success((url : resourceURL,image : cacheImage)))
         } else {
             let dataTask = URLSession.shared.dataTask(with: resourceURL) { (data, _, _) in
-                guard let image = UIImage(data: data!) else {
+                guard let image = UIImage(data: (data) ?? UIImage(named: "noImage.jpg")!.pngData()!) else {
                     completion(.failure(.NoDataAvailable))
                     return
                 }

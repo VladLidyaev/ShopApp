@@ -130,6 +130,7 @@ class SearchViewModel{
                     }
                 case .failure(_):
                     errorCondition.accept(true)
+                    print("meee :(")
                 }
             }
         }

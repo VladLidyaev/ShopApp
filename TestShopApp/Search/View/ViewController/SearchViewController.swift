@@ -81,20 +81,11 @@ class SearchViewController: UIViewController {
                         label.text = "No Result"
                     }
                 } else {
-                    if Reachability.isConnectedToNetwork(){
-                        DispatchQueue.main.async {
-                            activityIndicator.isHidden = false
-                            activityIndicator.startAnimating()
-                            label.isHidden = false
-                            label.text = "Loading ..."
-                        }
-                    }else{
-                        DispatchQueue.main.async {
-                            activityIndicator.isHidden = true
-                            activityIndicator.stopAnimating()
-                            label.isHidden = false
-                            label.text = "No Connection"
-                        }
+                    DispatchQueue.main.async {
+                        activityIndicator.isHidden = false
+                        activityIndicator.startAnimating()
+                        label.isHidden = false
+                        label.text = "Loading ..."
                     }
                 }
             } else {
@@ -136,8 +127,10 @@ class SearchViewController: UIViewController {
         
         _ = viewModel.errorCondition // Подписываемся на ошибки с сервера
             .subscribe { [self] (value) in
-                if (value.element! == true) && (Reachability.isConnectedToNetwork()) {
+                print("subs")
+                if (value.element! == true) {
                     ShowAlert()
+                    print("subs")
                 }
             }.disposed(by: DBag)
     }
@@ -176,11 +169,16 @@ class SearchViewController: UIViewController {
     }
     
     func ShowAlert(){ // Окно вспывает на ошибки при взаимодействии с сервером
-        let alert = UIAlertController(title: "Houston, we have a problem...", message: "We have a small problem on the server. We'll fix it soon", preferredStyle: .alert)
-//        alert.addAction(UIAlertAction(title: "I'll come back later", style: .cancel, handler: { (action) in
-//            UIControl().sendAction(#selector(NSXPCConnection.suspend), to: UIApplication.shared, for: nil)
-//        }))
-        present(alert, animated: true)
+        let HoustonMess = "Houston, we have a problem..."
+        DispatchQueue.main.async {
+            if Reachability.isConnectedToNetwork() {
+                let alert = UIAlertController(title: HoustonMess, message: "We have a small problem on the server. We'll fix it soon", preferredStyle: .alert)
+                self.present(alert, animated: true)
+            } else {
+                let alert = UIAlertController(title: HoustonMess, message: "You have problems connecting to the Internet, check your connection and restart the app.", preferredStyle: .alert)
+                self.present(alert, animated: true)
+            }
+        }
     }
     
     @objc func doneButtonPressed() {
