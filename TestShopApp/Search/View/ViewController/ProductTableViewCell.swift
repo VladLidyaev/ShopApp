@@ -71,6 +71,7 @@ class ProductTableViewCell: UITableViewCell {
         
         countInBag.subscribe { [self] (count) in // Изменение данных о выбранном количестве товаров
             label.text = String(count.element!)
+            stepper.value = Double(count.element!)
             productInfo.countInBag = count.element!
             
             NotificationCenter.default.post(name: Notification.Name("updateBag"), // Уведомление в searchVC
