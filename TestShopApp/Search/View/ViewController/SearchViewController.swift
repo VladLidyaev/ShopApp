@@ -136,7 +136,7 @@ class SearchViewController: UIViewController {
         
         _ = viewModel.errorCondition // Подписываемся на ошибки с сервера
             .subscribe { [self] (value) in
-                if (value.element! == true) {
+                if (value.element! == true) && (Reachability.isConnectedToNetwork()) {
                     ShowAlert()
                 }
             }.disposed(by: DBag)
@@ -177,9 +177,9 @@ class SearchViewController: UIViewController {
     
     func ShowAlert(){ // Окно вспывает на ошибки при взаимодействии с сервером
         let alert = UIAlertController(title: "Houston, we have a problem...", message: "We have a small problem on the server. We'll fix it soon", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "I'll come back later", style: .cancel, handler: { (action) in
-            UIControl().sendAction(#selector(NSXPCConnection.suspend), to: UIApplication.shared, for: nil)
-        }))
+//        alert.addAction(UIAlertAction(title: "I'll come back later", style: .cancel, handler: { (action) in
+//            UIControl().sendAction(#selector(NSXPCConnection.suspend), to: UIApplication.shared, for: nil)
+//        }))
         present(alert, animated: true)
     }
     
